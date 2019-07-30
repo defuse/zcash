@@ -35,6 +35,7 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include <execinfo.h>
 
 #include <boost/shared_ptr.hpp>
 
@@ -1337,7 +1338,11 @@ public:
 
     ~CReserveKey()
     {
-        ReturnKey();
+        std::cerr << "ERROR: CReserveKey was not explicitly returned or kept.\n";
+        void *array[10];
+        size_t size = backtrace(array, 10);
+        backtrace_symbols_fd(array, size, STDERR_FILENO);
+        std::terminate();
     }
 
     void ReturnKey();
