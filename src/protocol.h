@@ -31,8 +31,8 @@ class CMessageHeader
 public:
     typedef unsigned char MessageStartChars[MESSAGE_START_SIZE];
 
-    CMessageHeader(const MessageStartChars& pchMessageStartIn);
-    CMessageHeader(const MessageStartChars& pchMessageStartIn, const char* pszCommand, unsigned int nMessageSizeIn);
+    [[clang::xray_always_instrument]] CMessageHeader(const MessageStartChars& pchMessageStartIn);
+    [[clang::xray_always_instrument]] CMessageHeader(const MessageStartChars& pchMessageStartIn, const char* pszCommand, unsigned int nMessageSizeIn);
 
     std::string GetCommand() const;
     bool IsValid(const MessageStartChars& messageStart) const;

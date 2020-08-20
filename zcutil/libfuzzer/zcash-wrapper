@@ -65,14 +65,14 @@ echo -- "original command: $0 $@" | log
 
 if [ "$LLVM_SANITIZE" = "" ]
 then
-    export LLVM_SANITIZE="address" # you can override this behavior by setting this environment variable first
+    export LLVM_SANITIZE="" # you can override this behavior by setting this environment variable first
 fi
 
 if [ "$FINAL_LINK" = "1" ]
 then
-        export LLVM_SANITIZE="-fsanitize=fuzzer,$LLVM_SANITIZE"
+        export LLVM_SANITIZE="-fxray-instrument -fxray-attr-list=/home/firexware/zcash/zcash2/specialcase.txt"
 else
-        export LLVM_SANITIZE="-fsanitize=fuzzer-no-link,$LLVM_SANITIZE"
+        export LLVM_SANITIZE="-fxray-instrument -fxray-attr-list=/home/firexware/zcash/zcash2/specialcase.txt"
 fi
 
 
@@ -81,12 +81,12 @@ fi
 case $0 in
 *zcash-wrapper-clang)
     COMPILER="clang"
-    export DEFINES_FLAGS="${CFLAGS} -DZCASH_FUZZ=1 -DFUZZ_WITH_LIBFUZZER=1 -fPIC"
+    export DEFINES_FLAGS="${CFLAGS} -DFUZZ_WITH_LIBFUZZER=1 -fPIC"
     export INSTRUMENT_FLAGS="${DEFINES_FLAGS} ${LLVM_SANITIZE}"
     ;;
 *zcash-wrapper-clang++)
     COMPILER="clang++"
-    export DEFINES_FLAGS="${CXXFLAGS} -DZCASH_FUZZ=1 -DFUZZ_WITH_LIBFUZZER=1 -fPIC"
+    export DEFINES_FLAGS="${CXXFLAGS} -DFUZZ_WITH_LIBFUZZER=1 -fPIC"
     export INSTRUMENT_FLAGS="${DEFINES_FLAGS} ${LLVM_SANITIZE}"
     ;;
 *zcash-wrapper)

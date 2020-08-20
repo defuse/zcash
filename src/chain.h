@@ -441,11 +441,11 @@ public:
     // objects from disk anyway).
     int nClientVersion = 0;
 
-    CDiskBlockIndex() {
+    [[clang::xray_always_instrument]] CDiskBlockIndex() {
         hashPrev = uint256();
     }
 
-    explicit CDiskBlockIndex(const CBlockIndex* pindex) : CBlockIndex(*pindex) {
+    [[clang::xray_always_instrument]] explicit CDiskBlockIndex(const CBlockIndex* pindex) : CBlockIndex(*pindex) {
         hashPrev = (pprev ? pprev->GetBlockHash() : uint256());
     }
 
